@@ -1,0 +1,747 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Visualizing Neural Networks — Portfolio Artifact</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link href="/css/neural-networks.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="page">
+      <!-- HERO -->
+      <div class="hero">
+        <div>
+          <div class="hero-eyebrow">
+            Portfolio Artifact &nbsp;·&nbsp; Workshop 2 &nbsp;·&nbsp; 3SU2026
+            Model Development
+          </div>
+          <h1 class="hero-title">Visualizing<br /><em>Neural Networks</em></h1>
+          <p class="hero-sub">
+            A structured visual breakdown of the core components that make
+            neural networks learn: from layers and neurons to loss functions and
+            optimization algorithms.
+          </p>
+        </div>
+        <div class="hero-badge">
+          <span class="hero-badge-num">6</span>
+          <span class="hero-badge-label">Core<br />Components</span>
+        </div>
+      </div>
+
+      <!-- ARCHITECTURE DIAGRAM SECTION -->
+      <div class="sec-head">
+        <div class="sec-icon">🧠</div>
+        <div class="sec-title">
+          Neural Network Architecture <span>How data flows</span>
+        </div>
+      </div>
+
+      <div class="arch-wrap">
+        <div class="arch-diagram">
+          <!-- INPUT LAYER -->
+          <div class="arch-layer">
+            <div class="arch-layer-label input">Input Layer</div>
+            <div class="neuron-col">
+              <div class="neuron-node input-n">x₁</div>
+              <div class="neuron-node input-n">x₂</div>
+              <div class="neuron-node input-n">x₃</div>
+              <div class="neuron-node input-n">x₄</div>
+            </div>
+            <div
+              style="
+                font-size: 11px;
+                color: var(--ink-muted);
+                margin-top: 10px;
+                text-align: center;
+              "
+            >
+              Raw features<br />enter here
+            </div>
+          </div>
+
+          <!-- ARROWS 1 -->
+          <div class="arch-arrow-zone">
+            <svg viewBox="0 0 48 200" preserveAspectRatio="none">
+              <defs>
+                <marker
+                  id="arr"
+                  markerWidth="6"
+                  markerHeight="6"
+                  refX="3"
+                  refY="3"
+                  orient="auto"
+                >
+                  <path d="M0,0 L6,3 L0,6 Z" fill="#d0c8c0" />
+                </marker>
+              </defs>
+              <line
+                x1="2"
+                y1="40"
+                x2="42"
+                y2="60"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <line
+                x1="2"
+                y1="40"
+                x2="42"
+                y2="100"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <line
+                x1="2"
+                y1="40"
+                x2="42"
+                y2="140"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <line
+                x1="2"
+                y1="80"
+                x2="42"
+                y2="60"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <line
+                x1="2"
+                y1="80"
+                x2="42"
+                y2="100"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <line
+                x1="2"
+                y1="80"
+                x2="42"
+                y2="140"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <line
+                x1="2"
+                y1="120"
+                x2="42"
+                y2="60"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <line
+                x1="2"
+                y1="120"
+                x2="42"
+                y2="100"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <line
+                x1="2"
+                y1="120"
+                x2="42"
+                y2="140"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <line
+                x1="2"
+                y1="160"
+                x2="42"
+                y2="60"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <line
+                x1="2"
+                y1="160"
+                x2="42"
+                y2="100"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <line
+                x1="2"
+                y1="160"
+                x2="42"
+                y2="140"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <text
+                x="24"
+                y="24"
+                text-anchor="middle"
+                font-size="8"
+                fill="#A3293F"
+                font-family="DM Sans"
+              >
+                weights
+              </text>
+            </svg>
+          </div>
+
+          <!-- HIDDEN LAYER 1 -->
+          <div class="arch-layer">
+            <div class="arch-layer-label hidden">Hidden Layer 1</div>
+            <div class="neuron-col">
+              <div class="neuron-node hidden-n">h₁</div>
+              <div class="neuron-node hidden-n">h₂</div>
+              <div class="neuron-node hidden-n">h₃</div>
+            </div>
+            <div
+              style="
+                font-size: 11px;
+                color: var(--ink-muted);
+                margin-top: 10px;
+                text-align: center;
+              "
+            >
+              Feature<br />extraction
+            </div>
+          </div>
+
+          <!-- ARROWS 2 -->
+          <div class="arch-arrow-zone">
+            <svg viewBox="0 0 48 200" preserveAspectRatio="none">
+              <line
+                x1="2"
+                y1="60"
+                x2="42"
+                y2="60"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <line
+                x1="2"
+                y1="60"
+                x2="42"
+                y2="100"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <line
+                x1="2"
+                y1="60"
+                x2="42"
+                y2="140"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <line
+                x1="2"
+                y1="100"
+                x2="42"
+                y2="60"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <line
+                x1="2"
+                y1="100"
+                x2="42"
+                y2="100"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <line
+                x1="2"
+                y1="100"
+                x2="42"
+                y2="140"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <line
+                x1="2"
+                y1="140"
+                x2="42"
+                y2="60"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <line
+                x1="2"
+                y1="140"
+                x2="42"
+                y2="100"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <line
+                x1="2"
+                y1="140"
+                x2="42"
+                y2="140"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <text
+                x="24"
+                y="24"
+                text-anchor="middle"
+                font-size="8"
+                fill="#A3293F"
+                font-family="DM Sans"
+              >
+                weights
+              </text>
+            </svg>
+          </div>
+
+          <!-- HIDDEN LAYER 2 -->
+          <div class="arch-layer">
+            <div class="arch-layer-label hidden">Hidden Layer 2</div>
+            <div class="neuron-col">
+              <div class="neuron-node hidden-n">h₄</div>
+              <div class="neuron-node hidden-n">h₅</div>
+              <div class="neuron-node hidden-n">h₆</div>
+            </div>
+            <div
+              style="
+                font-size: 11px;
+                color: var(--ink-muted);
+                margin-top: 10px;
+                text-align: center;
+              "
+            >
+              Pattern<br />combination
+            </div>
+          </div>
+
+          <!-- ARROWS 3 -->
+          <div class="arch-arrow-zone">
+            <svg viewBox="0 0 48 200" preserveAspectRatio="none">
+              <line
+                x1="2"
+                y1="60"
+                x2="42"
+                y2="80"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <line
+                x1="2"
+                y1="60"
+                x2="42"
+                y2="120"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <line
+                x1="2"
+                y1="100"
+                x2="42"
+                y2="80"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <line
+                x1="2"
+                y1="100"
+                x2="42"
+                y2="120"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <line
+                x1="2"
+                y1="140"
+                x2="42"
+                y2="80"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <line
+                x1="2"
+                y1="140"
+                x2="42"
+                y2="120"
+                stroke="#d0c8c0"
+                stroke-width="1.2"
+                marker-end="url(#arr)"
+              />
+              <text
+                x="24"
+                y="24"
+                text-anchor="middle"
+                font-size="8"
+                fill="#A3293F"
+                font-family="DM Sans"
+              >
+                weights
+              </text>
+            </svg>
+          </div>
+
+          <!-- OUTPUT LAYER -->
+          <div class="arch-layer">
+            <div class="arch-layer-label output">Output Layer</div>
+            <div class="neuron-col">
+              <div class="neuron-node output-n">ŷ₁</div>
+              <div class="neuron-node output-n">ŷ₂</div>
+            </div>
+            <div
+              style="
+                font-size: 11px;
+                color: var(--ink-muted);
+                margin-top: 10px;
+                text-align: center;
+              "
+            >
+              Final<br />prediction
+            </div>
+          </div>
+        </div>
+        <p class="arch-note">
+          Each connection between neurons carries a <strong>weight</strong>.
+          Each neuron applies an <strong>activation function</strong>. The
+          network trains by minimizing a <strong>loss function</strong> using an
+          <strong>optimization algorithm</strong>.
+        </p>
+      </div>
+
+      <!-- DATA FLOW BAR -->
+      <div class="data-flow">
+        <div class="flow-step">
+          <div class="flow-step-num">Step 1</div>
+          <div class="flow-step-label">Input</div>
+          <div class="flow-step-sub">Raw data enters</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">Step 2</div>
+          <div class="flow-step-label">Forward Pass</div>
+          <div class="flow-step-sub">Weights applied, activations fire</div>
+        </div>
+        <div class="flow-step active-step">
+          <div class="flow-step-num">Step 3</div>
+          <div class="flow-step-label">Loss Calculated</div>
+          <div class="flow-step-sub">Error measured</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">Step 4</div>
+          <div class="flow-step-label">Backpropagation</div>
+          <div class="flow-step-sub">Gradients computed</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">Step 5</div>
+          <div class="flow-step-label">Weight Update</div>
+          <div class="flow-step-sub">Optimizer adjusts weights</div>
+        </div>
+      </div>
+
+      <!-- COMPONENTS SECTION -->
+      <div class="sec-head">
+        <div class="sec-icon">⚙️</div>
+        <div class="sec-title">
+          Core Components <span>Definitions and roles</span>
+        </div>
+      </div>
+
+      <div class="comp-grid">
+        <!-- LAYERS -->
+        <div class="comp-card c-layer">
+          <div class="comp-icon">▤</div>
+          <div class="comp-name">Layers</div>
+          <div class="comp-role">Structure of the network</div>
+          <p class="comp-desc">
+            A layer is a group of neurons that process information at the same
+            stage of the network. The input layer receives raw data, hidden
+            layers transform it through learned representations, and the output
+            layer produces the final prediction.
+          </p>
+          <div class="comp-analogy">
+            <strong>Analogy:</strong> Stages in a factory assembly line — each
+            stage performs a specific transformation before passing the result
+            to the next.
+          </div>
+          <div class="comp-examples">
+            <span class="ex-tag">Input Layer</span>
+            <span class="ex-tag">Hidden Layers</span>
+            <span class="ex-tag">Output Layer</span>
+          </div>
+        </div>
+
+        <!-- NEURONS -->
+        <div class="comp-card c-neuron">
+          <div class="comp-icon">●</div>
+          <div class="comp-name">Neurons</div>
+          <div class="comp-role">Basic computational units</div>
+          <p class="comp-desc">
+            A neuron receives one or more inputs, multiplies each by its
+            associated weight, sums the results, adds a bias term, and passes
+            the total through an activation function. Each neuron contributes a
+            small part of the overall computation.
+          </p>
+          <div class="comp-analogy">
+            <strong>Analogy:</strong> Individual workers on the factory floor —
+            each performs one small calculation and passes the result forward.
+          </div>
+          <div class="comp-examples">
+            <span class="ex-tag">Weighted sum</span>
+            <span class="ex-tag">Bias addition</span>
+            <span class="ex-tag">Activation output</span>
+          </div>
+        </div>
+
+        <!-- WEIGHTS -->
+        <div class="comp-card c-weight">
+          <div class="comp-icon">⚖</div>
+          <div class="comp-name">Weights</div>
+          <div class="comp-role">Learnable parameters</div>
+          <p class="comp-desc">
+            Weights are numerical values assigned to each connection between
+            neurons. They control how strongly one neuron's output influences
+            the next. During training, weights are adjusted to minimize
+            prediction error — this adjustment is the core of what learning
+            means in a neural network.
+          </p>
+          <div class="comp-analogy">
+            <strong>Analogy:</strong> Adjustable dials on a mixing board —
+            turning each one changes how much a given input influences the
+            output signal.
+          </div>
+          <div class="comp-examples">
+            <span class="ex-tag">Initialized randomly</span>
+            <span class="ex-tag">Updated each epoch</span>
+            <span class="ex-tag">Encodes learned patterns</span>
+          </div>
+        </div>
+
+        <!-- ACTIVATION FUNCTIONS -->
+        <div class="comp-card c-activ">
+          <div class="comp-icon">⚡</div>
+          <div class="comp-name">Activation Functions</div>
+          <div class="comp-role">Non-linearity introduction</div>
+          <p class="comp-desc">
+            After a neuron computes its weighted sum, an activation function
+            decides whether and how strongly that neuron fires. Without
+            activation functions, a neural network would be equivalent to a
+            single linear transformation regardless of depth. Activation
+            functions introduce the non-linearity that allows networks to model
+            complex patterns.
+          </p>
+          <div class="comp-analogy">
+            <strong>Analogy:</strong> A light switch with a dimmer — the
+            activation function decides whether the neuron turns on, and if so,
+            how bright.
+          </div>
+          <div class="activ-fns">
+            <div class="afn-card">
+              <div class="afn-name">ReLU</div>
+              <div class="afn-range">Output: 0 or x</div>
+              <div class="afn-use">Most common in hidden layers</div>
+            </div>
+            <div class="afn-card">
+              <div class="afn-name">Sigmoid</div>
+              <div class="afn-range">Output: 0 → 1</div>
+              <div class="afn-use">Binary classification output</div>
+            </div>
+            <div class="afn-card">
+              <div class="afn-name">Tanh</div>
+              <div class="afn-range">Output: −1 → 1</div>
+              <div class="afn-use">Centered around zero</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LOSS FUNCTIONS -->
+        <div class="comp-card c-loss">
+          <div class="comp-icon">📉</div>
+          <div class="comp-name">Loss Functions</div>
+          <div class="comp-role">Error measurement</div>
+          <p class="comp-desc">
+            A loss function measures how far the network's predictions are from
+            the correct answers. A high loss means the model is performing
+            poorly; a low loss means it is close to correct. The loss function
+            is the signal that guides all learning — without it, the network has
+            no feedback mechanism to improve from.
+          </p>
+          <div class="comp-analogy">
+            <strong>Analogy:</strong> A test score — it tells you how wrong you
+            were, which is the information you need to study better next time.
+          </div>
+          <div class="comp-examples">
+            <span class="ex-tag">Mean Squared Error</span>
+            <span class="ex-tag">Cross-Entropy Loss</span>
+            <span class="ex-tag">Binary Cross-Entropy</span>
+          </div>
+        </div>
+
+        <!-- OPTIMIZATION ALGORITHMS -->
+        <div class="comp-card c-optim">
+          <div class="comp-icon">🔧</div>
+          <div class="comp-name">Optimization Algorithms</div>
+          <div class="comp-role">Weight update mechanism</div>
+          <p class="comp-desc">
+            Optimization algorithms use the loss value to compute gradients —
+            the direction and magnitude of change needed for each weight. They
+            then update the weights to reduce the loss. This process repeats
+            across many training iterations until the loss converges to a
+            minimum.
+          </p>
+          <div class="comp-analogy">
+            <strong>Analogy:</strong> A hiking guide helping you descend a
+            mountain in the dark — at each step, they calculate the steepest
+            downhill direction and move you that way.
+          </div>
+          <div class="comp-examples">
+            <span class="ex-tag">Gradient Descent</span>
+            <span class="ex-tag">Stochastic GD</span>
+            <span class="ex-tag">Adam Optimizer</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TRAINING LOOP -->
+      <div class="training-loop">
+        <div class="loop-title">
+          How All Components Work Together: The Training Loop
+        </div>
+        <div class="loop-steps">
+          <div class="loop-step">
+            <div class="loop-step-n">Step 1</div>
+            <div class="loop-step-title">Feed Input</div>
+            <div class="loop-step-desc">
+              Raw data enters through the input layer neurons.
+            </div>
+          </div>
+          <div class="loop-step">
+            <div class="loop-step-n">Step 2</div>
+            <div class="loop-step-title">Apply Weights</div>
+            <div class="loop-step-desc">
+              Each connection multiplies its signal by a learned weight.
+            </div>
+          </div>
+          <div class="loop-step">
+            <div class="loop-step-n">Step 3</div>
+            <div class="loop-step-title">Activate Neurons</div>
+            <div class="loop-step-desc">
+              Activation functions decide which neurons fire and how strongly.
+            </div>
+          </div>
+          <div class="loop-step">
+            <div class="loop-step-n">Step 4</div>
+            <div class="loop-step-title">Compute Loss</div>
+            <div class="loop-step-desc">
+              The loss function measures how far the prediction is from the
+              truth.
+            </div>
+          </div>
+          <div class="loop-step">
+            <div class="loop-step-n">Step 5</div>
+            <div class="loop-step-title">Backpropagate</div>
+            <div class="loop-step-desc">
+              Gradients flow backward through the network via chain rule.
+            </div>
+          </div>
+          <div class="loop-step">
+            <div class="loop-step-n">Step 6</div>
+            <div class="loop-step-title">Update Weights</div>
+            <div class="loop-step-desc">
+              The optimizer adjusts each weight to reduce the loss.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUMMARY SLIDE -->
+      <div class="summary">
+        <div class="summary-title">Summary: Key Insights</div>
+        <div class="summary-grid">
+          <div class="summary-item">
+            <div class="summary-dot"></div>
+            <div class="summary-item-text">
+              <strong>Layers organize computation</strong> — input, hidden, and
+              output layers each play a distinct role in progressively refining
+              raw data into a prediction.
+            </div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-dot"></div>
+            <div class="summary-item-text">
+              <strong>Weights encode all learning</strong> — everything the
+              network knows is stored in its weight values, which are adjusted
+              during every training iteration.
+            </div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-dot"></div>
+            <div class="summary-item-text">
+              <strong>Activation functions enable complexity</strong> — without
+              non-linearity, depth adds no expressive power. ReLU is preferred
+              in most hidden layers for its simplicity and effectiveness.
+            </div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-dot"></div>
+            <div class="summary-item-text">
+              <strong>Loss functions provide the learning signal</strong> — the
+              choice of loss function must match the task: MSE for regression,
+              cross-entropy for classification.
+            </div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-dot"></div>
+            <div class="summary-item-text">
+              <strong>Optimizers translate loss into weight updates</strong> —
+              Adam is widely used because it adapts the learning rate per
+              parameter, converging faster than standard gradient descent.
+            </div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-dot"></div>
+            <div class="summary-item-text">
+              <strong>All six components form a closed loop</strong> — removing
+              any one of them breaks the network's ability to learn. Each is
+              necessary and each has a specific, irreplaceable role.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="footer">
+        <div class="footer-left">
+          Indiana Wesleyan University &nbsp;·&nbsp; 3SU2026 Model Development
+          &nbsp;·&nbsp; Workshop 2
+        </div>
+        <div class="footer-right">
+          Portfolio Artifact &nbsp;·&nbsp; Neural Networks
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
