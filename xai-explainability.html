@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Explainable AI — Portfolio Artifact</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --burgundy: #7B1C2E;
+    --burgundy-light: #A3293F;
+    --burgundy-pale: #f5e8eb;
+    --ink: #1a1a1a;
+    --ink-mid: #3d3d3d;
+    --ink-muted: #6b6b6b;
+    --surface: #faf9f7;
+    --card: #ffffff;
+    --border: #e8e2dc;
+    --border-strong: #d0c8c0;
+    --c1: #1a5276; --bg1: #e8f1f8;
+    --c2: #4a235a; --bg2: #f0e8f5;
+    --c3: #7d4e00; --bg3: #fdf3e3;
+    --c4: #2E7D5A; --bg4: #e6f4ee;
+    --c5: #7B1C2E; --bg5: #f5e8eb;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--surface); color: var(--ink); }
+  .page { max-width: 980px; margin: 0 auto; padding: 48px 32px 80px; }
+
+  /* HERO */
+  .hero { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 24px; margin-bottom: 52px; padding-bottom: 32px; border-bottom: 2px solid var(--burgundy); }
+  .hero-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--burgundy); margin-bottom: 10px; }
+  .hero-title { font-family: 'DM Serif Display', serif; font-size: 42px; line-height: 1.08; color: var(--ink); margin-bottom: 12px; }
+  .hero-title em { color: var(--burgundy); font-style: italic; }
+  .hero-sub { font-size: 15px; color: var(--ink-muted); line-height: 1.65; max-width: 560px; }
+  .hero-badge { background: var(--burgundy); color: white; padding: 18px 22px; border-radius: 4px; text-align: center; min-width: 110px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .hero-badge-num { font-family: 'DM Serif Display', serif; font-size: 36px; line-height: 1; }
+  .hero-badge-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.85; line-height: 1.3; }
+
+  /* SECTION HEADERS */
+  .sec-head { display: flex; align-items: center; gap: 12px; margin-top: 52px; margin-bottom: 22px; }
+  .sec-icon { width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; background: var(--burgundy-pale); color: var(--burgundy); }
+  .sec-title { font-family: 'DM Serif Display', serif; font-size: 24px; color: var(--ink); }
+  .sec-title span { font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; margin-left: 10px; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+  /* DEFINITION BANNER */
+  .def-banner { background: var(--burgundy); color: white; border-radius: 12px; padding: 28px 32px; margin-bottom: 8px; }
+  .def-banner-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.75; margin-bottom: 8px; }
+  .def-banner-title { font-family: 'DM Serif Display', serif; font-size: 22px; margin-bottom: 12px; }
+  .def-banner-text { font-size: 14px; line-height: 1.7; opacity: 0.9; max-width: 720px; }
+
+  /* WHY IT MATTERS */
+  .why-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-top: 8px; }
+  .why-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
+  .why-icon { font-size: 22px; margin-bottom: 10px; }
+  .why-title { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+  .why-text { font-size: 12px; color: var(--ink-muted); line-height: 1.6; }
+
+  /* CHALLENGES */
+  .challenge-list { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+  .challenge-item { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: start; }
+  .challenge-num { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--burgundy-pale); line-height: 1; flex-shrink: 0; width: 36px; }
+  .challenge-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 5px; }
+  .challenge-text { font-size: 13px; color: var(--ink-mid); line-height: 1.6; }
+  .challenge-tag { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 3px; background: var(--burgundy-pale); color: var(--burgundy); margin-top: 8px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* VALIDATION & METRICS */
+  .metrics-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 14px; margin-top: 8px; }
+  .metric-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px; position: relative; overflow: hidden; }
+  .metric-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .metric-card.m1::before { background: var(--c1); }
+  .metric-card.m2::before { background: var(--c2); }
+  .metric-card.m3::before { background: var(--c3); }
+  .metric-card.m4::before { background: var(--c4); }
+  .metric-card.m5::before { background: var(--c5); }
+  .metric-name { font-family: 'DM Serif Display', serif; font-size: 16px; color: var(--ink); margin-bottom: 4px; }
+  .metric-label { font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 10px; }
+  .m1 .metric-label { color: var(--c1); }
+  .m2 .metric-label { color: var(--c2); }
+  .m3 .metric-label { color: var(--c3); }
+  .m4 .metric-label { color: var(--c4); }
+  .m5 .metric-label { color: var(--c5); }
+  .metric-text { font-size: 12px; color: var(--ink-mid); line-height: 1.6; }
+  .metric-role { font-size: 11px; color: var(--ink-muted); margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); line-height: 1.5; }
+  .metric-role strong { color: var(--ink-mid); }
+
+  /* VALIDATION PROCESS FLOW */
+  .val-flow { display: flex; gap: 0; align-items: stretch; background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-top: 16px; }
+  .val-step { flex: 1; padding: 16px 14px; border-right: 1px solid var(--border); text-align: center; }
+  .val-step:last-child { border-right: none; }
+  .val-step-n { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--burgundy); margin-bottom: 5px; }
+  .val-step-title { font-size: 12px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+  .val-step-desc { font-size: 11px; color: var(--ink-muted); line-height: 1.5; }
+
+  /* INDUSTRY SOLUTIONS */
+  .solutions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 8px; }
+  .sol-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+  .sol-org { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+  .sol-card.openai .sol-org { color: #2e7d32; }
+  .sol-card.anthropic .sol-org { color: var(--burgundy); }
+  .sol-card.google .sol-org { color: #e65100; }
+  .sol-card.meta .sol-org { color: #1565c0; }
+  .sol-model { font-family: 'DM Serif Display', serif; font-size: 17px; color: var(--ink); margin-bottom: 10px; }
+  .sol-technique { font-size: 12px; font-weight: 600; color: var(--ink-mid); margin-bottom: 4px; }
+  .sol-text { font-size: 12px; color: var(--ink-muted); line-height: 1.6; margin-bottom: 10px; }
+  .sol-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+  .sol-tag { font-size: 10px; padding: 2px 7px; border-radius: 3px; background: var(--surface); border: 1px solid var(--border); color: var(--ink-muted); }
+
+  /* XAI TECHNIQUES */
+  .xai-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 8px; }
+  .xai-item { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; display: flex; gap: 14px; }
+  .xai-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--burgundy); flex-shrink: 0; margin-top: 4px; }
+  .xai-body {}
+  .xai-title { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+  .xai-text { font-size: 12px; color: var(--ink-muted); line-height: 1.6; }
+
+  /* FOOTER */
+  .footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .footer-left { font-size: 12px; color: var(--ink-muted); }
+  .footer-right { font-size: 11px; color: var(--burgundy); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+
+  @media (max-width: 600px) {
+    .page { padding: 28px 16px 56px; }
+    .hero { grid-template-columns: 1fr; }
+    .xai-grid { grid-template-columns: 1fr; }
+    .val-flow { flex-direction: column; }
+    .val-step { border-right: none; border-bottom: 1px solid var(--border); }
+    .val-step:last-child { border-bottom: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div>
+      <div class="hero-eyebrow">Portfolio Artifact &nbsp;·&nbsp; Workshop 4 &nbsp;·&nbsp; 3SU2026 Model Development</div>
+      <h1 class="hero-title">Explainable AI<br><em>(XAI) & Transparency</em></h1>
+      <p class="hero-sub">A visual breakdown of what makes AI decisions hard to explain, how industry leaders are working to fix that, and how validation and performance metrics build trust in AI systems.</p>
+    </div>
+    <div class="hero-badge">
+      <span class="hero-badge-num">4</span>
+      <span class="hero-badge-label">Key<br>Sections</span>
+    </div>
+  </div>
+
+  <!-- WHAT IS XAI -->
+  <div class="sec-head">
+    <div class="sec-icon">💡</div>
+    <div class="sec-title">What Is XAI? <span>Definition and importance</span></div>
+  </div>
+
+  <div class="def-banner">
+    <div class="def-banner-label">Definition</div>
+    <div class="def-banner-title">Explainable AI (XAI)</div>
+    <div class="def-banner-text">Explainable AI refers to the set of processes, methods, and tools that make the outputs and decisions of artificial intelligence systems understandable to humans. In a model like GPT, Claude, Gemini, or LLaMA, decisions emerge from billions of numerical parameters interacting in complex, non-linear ways. XAI aims to make those decisions interpretable — not just to AI researchers, but to the clinicians, judges, loan officers, and everyday users who are affected by them.</div>
+  </div>
+
+  <div class="why-grid" style="margin-top:14px;">
+    <div class="why-card">
+      <div class="why-icon">⚖️</div>
+      <div class="why-title">Legal Accountability</div>
+      <div class="why-text">Regulations like the EU AI Act and GDPR require that automated decisions affecting individuals can be explained and contested.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🏥</div>
+      <div class="why-title">High-Stakes Domains</div>
+      <div class="why-text">In healthcare, finance, and law, an unexplainable AI decision can cause direct harm. Clinicians need to understand why a model flagged a diagnosis.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🔍</div>
+      <div class="why-title">Bias Detection</div>
+      <div class="why-text">Explainability tools surface demographic biases that would otherwise remain hidden inside the model's parameters until they cause harm at scale.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🤝</div>
+      <div class="why-title">User Trust</div>
+      <div class="why-text">Users are more willing to act on AI recommendations when they can see the reasoning behind them, even a simplified version of it.</div>
+    </div>
+  </div>
+
+  <!-- CHALLENGES -->
+  <div class="sec-head">
+    <div class="sec-icon">⚠️</div>
+    <div class="sec-title">Challenges in Explainability <span>Why it is hard</span></div>
+  </div>
+
+  <div class="challenge-list">
+    <div class="challenge-item">
+      <div class="challenge-num">01</div>
+      <div>
+        <div class="challenge-title">Black Box Architecture</div>
+        <div class="challenge-text">Large language models distribute their decision-making across billions of parameters. No single neuron, layer, or attention head fully explains an output. The behavior emerges from the interaction of the entire network, making it fundamentally resistant to simple cause-and-effect explanation.</div>
+        <span class="challenge-tag">Model Complexity</span>
+      </div>
+    </div>
+    <div class="challenge-item">
+      <div class="challenge-num">02</div>
+      <div>
+        <div class="challenge-title">Post-Hoc Explanations May Not Reflect True Reasoning</div>
+        <div class="challenge-text">Most XAI techniques generate explanations after the model has already produced its output. These post-hoc explanations approximate the model's behavior but do not provide direct access to its internal reasoning. A model can produce a plausible-sounding explanation that does not accurately reflect what drove the actual output.</div>
+        <span class="challenge-tag">Faithfulness Gap</span>
+      </div>
+    </div>
+    <div class="challenge-item">
+      <div class="challenge-num">03</div>
+      <div>
+        <div class="challenge-title">Training Data Opacity</div>
+        <div class="challenge-text">The model's behavior reflects patterns in its training data, but for frontier models like GPT-4, the full dataset composition is not publicly disclosed. When a model produces a biased or incorrect output, it is difficult to trace the cause to specific data without visibility into what was in the training corpus.</div>
+        <span class="challenge-tag">Data Transparency</span>
+      </div>
+    </div>
+    <div class="challenge-item">
+      <div class="challenge-num">04</div>
+      <div>
+        <div class="challenge-title">Scale vs. Interpretability Tradeoff</div>
+        <div class="challenge-text">Larger models consistently outperform smaller ones on benchmarks, but they are harder to interpret. Techniques that work for explaining small decision trees or logistic regression models do not scale to billion-parameter transformers. Improving capability and improving interpretability currently pull in opposite directions.</div>
+        <span class="challenge-tag">Capability Tradeoff</span>
+      </div>
+    </div>
+    <div class="challenge-item">
+      <div class="challenge-num">05</div>
+      <div>
+        <div class="challenge-title">Regulatory and Compliance Uncertainty</div>
+        <div class="challenge-text">Different jurisdictions have different requirements for what counts as an adequate explanation of an AI decision. There is no established technical standard for what level of interpretability satisfies a legal obligation, leaving developers uncertain about how much explainability is enough for compliance purposes.</div>
+        <span class="challenge-tag">Regulatory Gap</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- VALIDATION & METRICS -->
+  <div class="sec-head">
+    <div class="sec-icon">📊</div>
+    <div class="sec-title">Validation & Performance Metrics <span>Building trust through measurement</span></div>
+  </div>
+
+  <div class="metrics-grid">
+    <div class="metric-card m1">
+      <div class="metric-name">Accuracy</div>
+      <div class="metric-label">Correctness</div>
+      <div class="metric-text">Percentage of predictions that match the true label. The starting point for any evaluation but insufficient alone for imbalanced datasets.</div>
+      <div class="metric-role"><strong>Trust role:</strong> Confirms the model is learning something meaningful rather than exploiting shortcuts.</div>
+    </div>
+    <div class="metric-card m2">
+      <div class="metric-name">Precision & Recall</div>
+      <div class="metric-label">Error Type Balance</div>
+      <div class="metric-text">Precision measures false positive rate; Recall measures false negative rate. Together they reveal which error type the model is making and at what rate.</div>
+      <div class="metric-role"><strong>Trust role:</strong> Essential in high-stakes domains where one error type costs far more than the other.</div>
+    </div>
+    <div class="metric-card m3">
+      <div class="metric-name">F1 Score</div>
+      <div class="metric-label">Balanced Summary</div>
+      <div class="metric-text">Harmonic mean of Precision and Recall. Penalizes extreme imbalance between the two, providing a single balanced summary metric.</div>
+      <div class="metric-role"><strong>Trust role:</strong> Single comparable metric when both precision and recall matter equally.</div>
+    </div>
+    <div class="metric-card m4">
+      <div class="metric-name">Calibration</div>
+      <div class="metric-label">Confidence Accuracy</div>
+      <div class="metric-text">Measures whether a model's confidence scores match actual accuracy. A well-calibrated model that says 80% confident is correct 80% of the time.</div>
+      <div class="metric-role"><strong>Trust role:</strong> Prevents over-confident wrong predictions, critical for medical and financial applications.</div>
+    </div>
+    <div class="metric-card m5">
+      <div class="metric-name">Robustness Score</div>
+      <div class="metric-label">Stability Under Shift</div>
+      <div class="metric-text">Measures how much model performance degrades when inputs are perturbed, paraphrased, or drawn from a different distribution than training data.</div>
+      <div class="metric-role"><strong>Trust role:</strong> Ensures the model is learning generalizable patterns, not surface-level shortcuts.</div>
+    </div>
+  </div>
+
+  <div class="val-flow">
+    <div class="val-step">
+      <div class="val-step-n">Phase 1</div>
+      <div class="val-step-title">Data Validation</div>
+      <div class="val-step-desc">Audit training data for bias, coverage gaps, and quality before training begins</div>
+    </div>
+    <div class="val-step">
+      <div class="val-step-n">Phase 2</div>
+      <div class="val-step-title">Cross-Validation</div>
+      <div class="val-step-desc">K-fold validation confirms performance is stable across different data splits</div>
+    </div>
+    <div class="val-step">
+      <div class="val-step-n">Phase 3</div>
+      <div class="val-step-title">Held-Out Testing</div>
+      <div class="val-step-desc">Final evaluation on unseen data to measure true generalization</div>
+    </div>
+    <div class="val-step">
+      <div class="val-step-n">Phase 4</div>
+      <div class="val-step-title">Red-Teaming</div>
+      <div class="val-step-desc">Adversarial probing for safety failures and edge cases before deployment</div>
+    </div>
+    <div class="val-step">
+      <div class="val-step-n">Phase 5</div>
+      <div class="val-step-title">Production Monitoring</div>
+      <div class="val-step-desc">Continuous metric tracking to detect drift or new failure modes post-deployment</div>
+    </div>
+  </div>
+
+  <!-- INDUSTRY SOLUTIONS -->
+  <div class="sec-head">
+    <div class="sec-icon">🏭</div>
+    <div class="sec-title">Industry Solutions <span>What leading organizations are doing</span></div>
+  </div>
+
+  <div class="solutions-grid">
+    <div class="sol-card openai">
+      <div class="sol-org">OpenAI</div>
+      <div class="sol-model">GPT-4 / o1</div>
+      <div class="sol-technique">Chain-of-Thought & Interpretability Research</div>
+      <div class="sol-text">OpenAI's o1 model produces visible reasoning traces before giving a final answer. Their mechanistic interpretability team maps how specific concepts are represented inside transformer layers using sparse autoencoders to identify human-readable features.</div>
+      <div class="sol-tags"><span class="sol-tag">Chain-of-Thought</span><span class="sol-tag">Mechanistic Interp.</span><span class="sol-tag">Sparse Autoencoders</span></div>
+    </div>
+    <div class="sol-card anthropic">
+      <div class="sol-org">Anthropic</div>
+      <div class="sol-model">Claude 3</div>
+      <div class="sol-technique">Constitutional AI & Interpretability</div>
+      <div class="sol-text">Anthropic's Constitutional AI trains Claude to evaluate its own outputs against a written set of principles, making the reasoning process more transparent. Their interpretability research has mapped features corresponding to specific concepts inside Claude's residual stream.</div>
+      <div class="sol-tags"><span class="sol-tag">Constitutional AI</span><span class="sol-tag">Feature Mapping</span><span class="sol-tag">Residual Stream</span></div>
+    </div>
+    <div class="sol-card google">
+      <div class="sol-org">Google DeepMind</div>
+      <div class="sol-model">Gemini</div>
+      <div class="sol-technique">Attention Visualization & TCAV</div>
+      <div class="sol-text">Google developed Testing with Concept Activation Vectors (TCAV), which tests whether human-defined concepts are represented inside a model's layers. For Gemini, attention visualization tools show which input tokens the model weighted most heavily when generating a response.</div>
+      <div class="sol-tags"><span class="sol-tag">TCAV</span><span class="sol-tag">Attention Viz</span><span class="sol-tag">Concept Probing</span></div>
+    </div>
+    <div class="sol-card meta">
+      <div class="sol-org">Meta AI</div>
+      <div class="sol-model">LLaMA 3</div>
+      <div class="sol-technique">Open Weights & LIME/SHAP</div>
+      <div class="sol-text">Meta's open-weight approach allows external researchers to apply their own interpretability tools directly to LLaMA's parameters. LIME and SHAP are widely applied to LLaMA fine-tuned variants to generate local feature-importance explanations for specific predictions.</div>
+      <div class="sol-tags"><span class="sol-tag">Open Weights</span><span class="sol-tag">LIME</span><span class="sol-tag">SHAP</span></div>
+    </div>
+  </div>
+
+  <!-- XAI TECHNIQUES -->
+  <div class="sec-head">
+    <div class="sec-icon">🔬</div>
+    <div class="sec-title">Core XAI Techniques <span>How transparency is achieved</span></div>
+  </div>
+
+  <div class="xai-grid">
+    <div class="xai-item">
+      <div class="xai-dot"></div>
+      <div class="xai-body">
+        <div class="xai-title">LIME (Local Interpretable Model-Agnostic Explanations)</div>
+        <div class="xai-text">Perturbs the input slightly and observes how the output changes, fitting a simple interpretable model locally around each prediction. Explains individual decisions without needing access to the model's internals.</div>
+      </div>
+    </div>
+    <div class="xai-item">
+      <div class="xai-dot"></div>
+      <div class="xai-body">
+        <div class="xai-title">SHAP (SHapley Additive exPlanations)</div>
+        <div class="xai-text">Uses game theory to assign each input feature a contribution score for a given prediction. Provides consistent, theoretically grounded feature importance values that aggregate across many predictions.</div>
+      </div>
+    </div>
+    <div class="xai-item">
+      <div class="xai-dot"></div>
+      <div class="xai-body">
+        <div class="xai-title">Attention Visualization</div>
+        <div class="xai-text">Maps the attention weights in transformer layers to show which input tokens the model attended to most when generating each output token. Provides an approximate view of the model's focus, though attention does not always correlate with causal importance.</div>
+      </div>
+    </div>
+    <div class="xai-item">
+      <div class="xai-dot"></div>
+      <div class="xai-body">
+        <div class="xai-title">Chain-of-Thought Prompting</div>
+        <div class="xai-text">Instructs the model to reason step by step before giving a final answer. The visible reasoning trace provides a form of explanation, though it reflects the model's generated reasoning rather than its internal computational process.</div>
+      </div>
+    </div>
+    <div class="xai-item">
+      <div class="xai-dot"></div>
+      <div class="xai-body">
+        <div class="xai-title">Mechanistic Interpretability</div>
+        <div class="xai-text">Reverse-engineers specific circuits inside neural networks to identify which components are responsible for specific behaviors. More faithful than post-hoc methods but significantly more technically demanding and currently limited to specific model behaviors.</div>
+      </div>
+    </div>
+    <div class="xai-item">
+      <div class="xai-dot"></div>
+      <div class="xai-body">
+        <div class="xai-title">Probing Classifiers</div>
+        <div class="xai-text">Trains small classifiers on top of a model's internal representations to test whether specific concepts are encoded at specific layers. Used to understand what information a model has learned and where it is stored in the network.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-left">Indiana Wesleyan University &nbsp;·&nbsp; 3SU2026 Model Development &nbsp;·&nbsp; Workshop 4</div>
+    <div class="footer-right">Portfolio Artifact &nbsp;·&nbsp; Explainable AI</div>
+  </div>
+
+</div>
+</body>
+</html>
