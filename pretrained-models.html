@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pre-Trained Model Decision Matrix — Portfolio Artifact</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --burgundy: #7B1C2E;
+    --burgundy-light: #A3293F;
+    --burgundy-pale: #f5e8eb;
+    --ink: #1a1a1a;
+    --ink-mid: #3d3d3d;
+    --ink-muted: #6b6b6b;
+    --surface: #faf9f7;
+    --card: #ffffff;
+    --border: #e8e2dc;
+    --nlp-c: #4a235a; --nlp-bg: #f0e8f5; --nlp-border: #c4a0d8;
+    --cv-c: #1a5276;  --cv-bg: #e8f1f8;  --cv-border: #8fb8d8;
+    --tab-c: #2E7D5A; --tab-bg: #e6f4ee; --tab-border: #9DD4B8;
+    --score-5: #2e7d32; --score-4: #558b2f; --score-3: #f9a825; --score-2: #e65100; --score-1: #c62828;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--surface); color: var(--ink); }
+  .page { max-width: 1020px; margin: 0 auto; padding: 48px 32px 80px; }
+
+  /* HERO */
+  .hero { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 24px; margin-bottom: 52px; padding-bottom: 32px; border-bottom: 2px solid var(--burgundy); }
+  .hero-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--burgundy); margin-bottom: 10px; }
+  .hero-title { font-family: 'DM Serif Display', serif; font-size: 42px; line-height: 1.08; color: var(--ink); margin-bottom: 12px; }
+  .hero-title em { color: var(--burgundy); font-style: italic; }
+  .hero-sub { font-size: 15px; color: var(--ink-muted); line-height: 1.65; max-width: 580px; }
+  .hero-badge { background: var(--burgundy); color: white; padding: 18px 22px; border-radius: 4px; text-align: center; min-width: 110px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .hero-badge-num { font-family: 'DM Serif Display', serif; font-size: 36px; line-height: 1; }
+  .hero-badge-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.85; line-height: 1.3; }
+
+  /* SECTION HEADERS */
+  .sec-head { display: flex; align-items: center; gap: 12px; margin-top: 52px; margin-bottom: 22px; }
+  .sec-icon { width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; background: var(--burgundy-pale); color: var(--burgundy); }
+  .sec-title { font-family: 'DM Serif Display', serif; font-size: 24px; color: var(--ink); }
+  .sec-title span { font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; margin-left: 10px; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+  /* DOMAIN LEGEND */
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 100px; border: 1.5px solid; }
+  .legend-dot { width: 9px; height: 9px; border-radius: 50%; }
+  .leg-nlp { color: var(--nlp-c); border-color: var(--nlp-border); background: var(--nlp-bg); }
+  .leg-nlp .legend-dot { background: var(--nlp-c); }
+  .leg-cv  { color: var(--cv-c);  border-color: var(--cv-border);  background: var(--cv-bg); }
+  .leg-cv  .legend-dot { background: var(--cv-c); }
+  .leg-tab { color: var(--tab-c); border-color: var(--tab-border); background: var(--tab-bg); }
+  .leg-tab .legend-dot { background: var(--tab-c); }
+
+  /* DECISION MATRIX TABLE */
+  .matrix-wrap { overflow-x: auto; margin-bottom: 8px; }
+  .matrix { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 820px; }
+  .matrix th { background: var(--burgundy); color: white; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 11px 14px; text-align: left; }
+  .matrix th:first-child { border-radius: 6px 0 0 0; }
+  .matrix th:last-child  { border-radius: 0 6px 0 0; }
+  .matrix td { padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
+  .matrix tr:last-child td { border-bottom: none; }
+  .matrix tr:nth-child(even) td { background: var(--surface); }
+  .model-name-cell { font-family: 'DM Serif Display', serif; font-size: 15px; color: var(--ink); font-weight: 600; }
+  .domain-badge { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 100px; margin-top: 4px; }
+  .db-nlp { background: var(--nlp-bg); color: var(--nlp-c); border: 1px solid var(--nlp-border); }
+  .db-cv  { background: var(--cv-bg);  color: var(--cv-c);  border: 1px solid var(--cv-border); }
+  .db-tab { background: var(--tab-bg); color: var(--tab-c); border: 1px solid var(--tab-border); }
+
+  /* SCORE DOTS */
+  .score-cell { display: flex; flex-direction: column; gap: 3px; }
+  .score-val { font-size: 13px; font-weight: 600; color: var(--ink); }
+  .score-sub { font-size: 11px; color: var(--ink-muted); }
+  .score-bar-wrap { margin-top: 4px; height: 5px; background: var(--border); border-radius: 100px; width: 80px; }
+  .score-bar { height: 100%; border-radius: 100px; }
+  .s5 { background: var(--score-5); }
+  .s4 { background: var(--score-4); }
+  .s3 { background: var(--score-3); }
+  .s2 { background: var(--score-2); }
+  .s1 { background: var(--score-1); }
+
+  /* TRADEOFF RADAR VISUAL */
+  .tradeoff-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-top: 8px; }
+  .tradeoff-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px; position: relative; overflow: hidden; }
+  .tradeoff-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .tc-nlp::before { background: var(--nlp-c); }
+  .tc-cv::before  { background: var(--cv-c); }
+  .tc-tab::before { background: var(--tab-c); }
+  .tc-name { font-family: 'DM Serif Display', serif; font-size: 16px; color: var(--ink); margin-bottom: 3px; }
+  .tc-org { font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 12px; }
+  .tc-bars { display: flex; flex-direction: column; gap: 8px; }
+  .tc-bar-row { display: flex; align-items: center; gap: 8px; }
+  .tc-bar-label { font-size: 10px; font-weight: 600; color: var(--ink-muted); width: 52px; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.05em; }
+  .tc-bar-track { flex: 1; height: 8px; background: var(--border); border-radius: 100px; overflow: hidden; }
+  .tc-bar-fill { height: 100%; border-radius: 100px; }
+  .fill-nlp { background: var(--nlp-c); }
+  .fill-cv  { background: var(--cv-c); }
+  .fill-tab { background: var(--tab-c); }
+  .tc-val { font-size: 11px; color: var(--ink-mid); width: 26px; text-align: right; flex-shrink: 0; }
+
+  /* RECOMMENDATIONS */
+  .rec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-top: 8px; }
+  .rec-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+  .rec-scenario { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--burgundy); margin-bottom: 6px; }
+  .rec-model { font-family: 'DM Serif Display', serif; font-size: 17px; color: var(--ink); margin-bottom: 8px; }
+  .rec-text { font-size: 13px; color: var(--ink-mid); line-height: 1.6; }
+
+  /* FOOTER */
+  .footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .footer-left { font-size: 12px; color: var(--ink-muted); }
+  .footer-right { font-size: 11px; color: var(--burgundy); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+
+  @media (max-width: 600px) {
+    .page { padding: 28px 16px 56px; }
+    .hero { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div>
+      <div class="hero-eyebrow">Portfolio Artifact &nbsp;·&nbsp; Workshop 5 &nbsp;·&nbsp; 3SU2026 Model Development</div>
+      <h1 class="hero-title">Pre-Trained Model<br><em>Decision Matrix</em></h1>
+      <p class="hero-sub">A structured comparison of eight pre-trained models across NLP/Generative AI, Computer Vision, and Tabular Data domains — analyzing trade-offs in size, accuracy, speed, explainability, and deployment fit.</p>
+    </div>
+    <div class="hero-badge">
+      <span class="hero-badge-num">8</span>
+      <span class="hero-badge-label">Models<br>Compared</span>
+    </div>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="legend-item leg-nlp"><div class="legend-dot"></div> NLP / Generative AI</div>
+    <div class="legend-item leg-cv"><div class="legend-dot"></div> Computer Vision</div>
+    <div class="legend-item leg-tab"><div class="legend-dot"></div> Tabular Data</div>
+  </div>
+
+  <!-- DECISION MATRIX -->
+  <div class="sec-head">
+    <div class="sec-icon">📋</div>
+    <div class="sec-title">Decision Matrix <span>Full comparison across all criteria</span></div>
+  </div>
+
+  <div class="matrix-wrap">
+  <table class="matrix">
+    <thead>
+      <tr>
+        <th style="width:16%">Model</th>
+        <th style="width:13%">Size</th>
+        <th style="width:14%">Accuracy</th>
+        <th style="width:12%">Speed</th>
+        <th style="width:13%">Explainability</th>
+        <th style="width:32%">Best Use Case / Trade-offs</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- NLP -->
+      <tr>
+        <td><div class="model-name-cell">GPT-4</div><div><span class="domain-badge db-nlp">NLP / Gen AI</span></div><div style="font-size:11px;color:var(--ink-muted);margin-top:3px;">OpenAI</div></td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">~1.8T params (est.)</div>
+            <div class="score-sub">MoE architecture</div>
+            <div class="score-bar-wrap"><div class="score-bar s2" style="width:95%"></div></div>
+          </div>
+        </td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">MMLU: 86.4%</div>
+            <div class="score-sub">HumanEval: 67%</div>
+            <div class="score-bar-wrap"><div class="score-bar s5" style="width:95%"></div></div>
+          </div>
+        </td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">~1–3s latency</div>
+            <div class="score-sub">API only</div>
+            <div class="score-bar-wrap"><div class="score-bar s2" style="width:25%"></div></div>
+          </div>
+        </td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">Low</div>
+            <div class="score-sub">Black box; chain-of-thought available</div>
+            <div class="score-bar-wrap"><div class="score-bar s2" style="width:25%"></div></div>
+          </div>
+        </td>
+        <td style="font-size:12px;color:var(--ink-mid);">Best for complex reasoning, code generation, and multimodal tasks. Not self-hostable; high API cost; knowledge cutoff limits currency.</td>
+      </tr>
+      <tr>
+        <td><div class="model-name-cell">BERT-base</div><div><span class="domain-badge db-nlp">NLP / Gen AI</span></div><div style="font-size:11px;color:var(--ink-muted);margin-top:3px;">Google</div></td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">110M params</div>
+            <div class="score-sub">~440 MB</div>
+            <div class="score-bar-wrap"><div class="score-bar s4" style="width:18%"></div></div>
+          </div>
+        </td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">GLUE: 79.6</div>
+            <div class="score-sub">SQuAD F1: 88.5</div>
+            <div class="score-bar-wrap"><div class="score-bar s3" style="width:65%"></div></div>
+          </div>
+        </td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">~20ms / batch</div>
+            <div class="score-sub">Self-hostable</div>
+            <div class="score-bar-wrap"><div class="score-bar s4" style="width:70%"></div></div>
+          </div>
+        </td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">Medium</div>
+            <div class="score-sub">Attention viz; probing classifiers</div>
+            <div class="score-bar-wrap"><div class="score-bar s3" style="width:50%"></div></div>
+          </div>
+        </td>
+        <td style="font-size:12px;color:var(--ink-mid);">Best for classification, NER, and QA fine-tuning on custom data. Not generative; requires labeled data; weaker on long-context tasks.</td>
+      </tr>
+      <tr>
+        <td><div class="model-name-cell">LLaMA 3 (8B)</div><div><span class="domain-badge db-nlp">NLP / Gen AI</span></div><div style="font-size:11px;color:var(--ink-muted);margin-top:3px;">Meta</div></td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">8B params</div>
+            <div class="score-sub">~16 GB (FP16)</div>
+            <div class="score-bar-wrap"><div class="score-bar s3" style="width:40%"></div></div>
+          </div>
+        </td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">MMLU: 66.6%</div>
+            <div class="score-sub">Strong for size</div>
+            <div class="score-bar-wrap"><div class="score-bar s4" style="width:75%"></div></div>
+          </div>
+        </td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">~200ms / token</div>
+            <div class="score-sub">Self-hostable</div>
+            <div class="score-bar-wrap"><div class="score-bar s3" style="width:55%"></div></div>
+          </div>
+        </td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">Low–Medium</div>
+            <div class="score-sub">Open weights; SHAP applicable</div>
+            <div class="score-bar-wrap"><div class="score-bar s3" style="width:40%"></div></div>
+          </div>
+        </td>
+        <td style="font-size:12px;color:var(--ink-mid);">Best for organizations wanting open weights and self-hosting capability. Requires GPU infrastructure; strong fine-tuning candidate via LoRA.</td>
+      </tr>
+      <!-- CV -->
+      <tr>
+        <td><div class="model-name-cell">ResNet-50</div><div><span class="domain-badge db-cv">Computer Vision</span></div><div style="font-size:11px;color:var(--ink-muted);margin-top:3px;">Microsoft</div></td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">25M params</div>
+            <div class="score-sub">~98 MB</div>
+            <div class="score-bar-wrap"><div class="score-bar s5" style="width:12%"></div></div>
+          </div>
+        </td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">ImageNet: 76.1%</div>
+            <div class="score-sub">Top-5: 92.9%</div>
+            <div class="score-bar-wrap"><div class="score-bar s4" style="width:76%"></div></div>
+          </div>
+        </td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">~25ms / image</div>
+            <div class="score-sub">CPU viable</div>
+            <div class="score-bar-wrap"><div class="score-bar s4" style="width:72%"></div></div>
+          </div>
+        </td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">Medium</div>
+            <div class="score-sub">Grad-CAM; layer activation maps</div>
+            <div class="score-bar-wrap"><div class="score-bar s4" style="width:55%"></div></div>
+          </div>
+        </td>
+        <td style="font-size:12px;color:var(--ink-mid);">Best general-purpose CV backbone for fine-tuning. Slightly outperformed by EfficientNet at same compute; standard baseline for most vision tasks.</td>
+      </tr>
+      <tr>
+        <td><div class="model-name-cell">MobileNetV2</div><div><span class="domain-badge db-cv">Computer Vision</span></div><div style="font-size:11px;color:var(--ink-muted);margin-top:3px;">Google</div></td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">3.4M params</div>
+            <div class="score-sub">~14 MB</div>
+            <div class="score-bar-wrap"><div class="score-bar s5" style="width:4%"></div></div>
+          </div>
+        </td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">ImageNet: 72.0%</div>
+            <div class="score-sub">Top-5: 90.6%</div>
+            <div class="score-bar-wrap"><div class="score-bar s3" style="width:70%"></div></div>
+          </div>
+        </td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">~5ms / image</div>
+            <div class="score-sub">Mobile / edge</div>
+            <div class="score-bar-wrap"><div class="score-bar s5" style="width:95%"></div></div>
+          </div>
+        </td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">Medium</div>
+            <div class="score-sub">Grad-CAM applicable</div>
+            <div class="score-bar-wrap"><div class="score-bar s4" style="width:55%"></div></div>
+          </div>
+        </td>
+        <td style="font-size:12px;color:var(--ink-mid);">Best for mobile and edge deployment where latency and model size are hard constraints. 4pt accuracy tradeoff vs ResNet is acceptable for most device-side applications.</td>
+      </tr>
+      <tr>
+        <td><div class="model-name-cell">EfficientNet-B4</div><div><span class="domain-badge db-cv">Computer Vision</span></div><div style="font-size:11px;color:var(--ink-muted);margin-top:3px;">Google</div></td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">19M params</div>
+            <div class="score-sub">~75 MB</div>
+            <div class="score-bar-wrap"><div class="score-bar s5" style="width:10%"></div></div>
+          </div>
+        </td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">ImageNet: 83.0%</div>
+            <div class="score-sub">Top-5: 96.4%</div>
+            <div class="score-bar-wrap"><div class="score-bar s5" style="width:88%"></div></div>
+          </div>
+        </td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">~35ms / image</div>
+            <div class="score-sub">GPU recommended</div>
+            <div class="score-bar-wrap"><div class="score-bar s3" style="width:60%"></div></div>
+          </div>
+        </td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">Medium</div>
+            <div class="score-sub">Grad-CAM; attention maps</div>
+            <div class="score-bar-wrap"><div class="score-bar s4" style="width:55%"></div></div>
+          </div>
+        </td>
+        <td style="font-size:12px;color:var(--ink-mid);">Best accuracy-per-parameter ratio in CV. Compound scaling achieves ResNet accuracy at ~25% fewer parameters; slower than ResNet at the same batch size.</td>
+      </tr>
+      <!-- TABULAR -->
+      <tr>
+        <td><div class="model-name-cell">XGBoost</div><div><span class="domain-badge db-tab">Tabular</span></div><div style="font-size:11px;color:var(--ink-muted);margin-top:3px;">DMLC</div></td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">KB–MB range</div>
+            <div class="score-sub">Scales with trees</div>
+            <div class="score-bar-wrap"><div class="score-bar s5" style="width:3%"></div></div>
+          </div>
+        </td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">Top Kaggle perf.</div>
+            <div class="score-sub">Task-dependent</div>
+            <div class="score-bar-wrap"><div class="score-bar s5" style="width:90%"></div></div>
+          </div>
+        </td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">&lt;1ms / row</div>
+            <div class="score-sub">CPU only fine</div>
+            <div class="score-bar-wrap"><div class="score-bar s5" style="width:98%"></div></div>
+          </div>
+        </td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">High</div>
+            <div class="score-sub">SHAP natively supported</div>
+            <div class="score-bar-wrap"><div class="score-bar s5" style="width:85%"></div></div>
+          </div>
+        </td>
+        <td style="font-size:12px;color:var(--ink-mid);">Best all-around tabular model for structured data. Gradient boosted trees with regularization. SHAP provides faithful feature attribution. Dominant in finance, insurance, and healthcare tabular tasks.</td>
+      </tr>
+      <tr>
+        <td><div class="model-name-cell">LightGBM</div><div><span class="domain-badge db-tab">Tabular</span></div><div style="font-size:11px;color:var(--ink-muted);margin-top:3px;">Microsoft</div></td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">KB–MB range</div>
+            <div class="score-sub">Leaf-wise growth</div>
+            <div class="score-bar-wrap"><div class="score-bar s5" style="width:3%"></div></div>
+          </div>
+        </td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">Comparable to XGB</div>
+            <div class="score-sub">Slightly better on large data</div>
+            <div class="score-bar-wrap"><div class="score-bar s5" style="width:88%"></div></div>
+          </div>
+        </td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">&lt;1ms / row</div>
+            <div class="score-sub">Faster train than XGB</div>
+            <div class="score-bar-wrap"><div class="score-bar s5" style="width:99%"></div></div>
+          </div>
+        </td>
+        <td>
+          <div class="score-cell">
+            <div class="score-val">High</div>
+            <div class="score-sub">SHAP natively supported</div>
+            <div class="score-bar-wrap"><div class="score-bar s5" style="width:85%"></div></div>
+          </div>
+        </td>
+        <td style="font-size:12px;color:var(--ink-mid);">Best when training speed matters or dataset is very large (&gt;1M rows). Histogram-based algorithm trains 10–20x faster than XGBoost on large datasets. Preferred for production pipelines with tight retraining schedules.</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <!-- TRADEOFF VISUAL -->
+  <div class="sec-head">
+    <div class="sec-icon">⚖️</div>
+    <div class="sec-title">Trade-off Profiles <span>Size · Accuracy · Speed · Explainability (1–5 scale)</span></div>
+  </div>
+
+  <div class="tradeoff-grid">
+    <div class="tradeoff-card tc-nlp">
+      <div class="tc-name">GPT-4</div><div class="tc-org">OpenAI · NLP</div>
+      <div class="tc-bars">
+        <div class="tc-bar-row"><div class="tc-bar-label">Accuracy</div><div class="tc-bar-track"><div class="tc-bar-fill fill-nlp" style="width:95%"></div></div><div class="tc-val">5/5</div></div>
+        <div class="tc-bar-row"><div class="tc-bar-label">Speed</div><div class="tc-bar-track"><div class="tc-bar-fill fill-nlp" style="width:20%"></div></div><div class="tc-val">1/5</div></div>
+        <div class="tc-bar-row"><div class="tc-bar-label">Compact</div><div class="tc-bar-track"><div class="tc-bar-fill fill-nlp" style="width:5%"></div></div><div class="tc-val">1/5</div></div>
+        <div class="tc-bar-row"><div class="tc-bar-label">Explain.</div><div class="tc-bar-track"><div class="tc-bar-fill fill-nlp" style="width:20%"></div></div><div class="tc-val">1/5</div></div>
+      </div>
+    </div>
+    <div class="tradeoff-card tc-nlp">
+      <div class="tc-name">BERT-base</div><div class="tc-org">Google · NLP</div>
+      <div class="tc-bars">
+        <div class="tc-bar-row"><div class="tc-bar-label">Accuracy</div><div class="tc-bar-track"><div class="tc-bar-fill fill-nlp" style="width:60%"></div></div><div class="tc-val">3/5</div></div>
+        <div class="tc-bar-row"><div class="tc-bar-label">Speed</div><div class="tc-bar-track"><div class="tc-bar-fill fill-nlp" style="width:70%"></div></div><div class="tc-val">4/5</div></div>
+        <div class="tc-bar-row"><div class="tc-bar-label">Compact</div><div class="tc-bar-track"><div class="tc-bar-fill fill-nlp" style="width:80%"></div></div><div class="tc-val">4/5</div></div>
+        <div class="tc-bar-row"><div class="tc-bar-label">Explain.</div><div class="tc-bar-track"><div class="tc-bar-fill fill-nlp" style="width:50%"></div></div><div class="tc-val">3/5</div></div>
+      </div>
+    </div>
+    <div class="tradeoff-card tc-nlp">
+      <div class="tc-name">LLaMA 3 (8B)</div><div class="tc-org">Meta · NLP</div>
+      <div class="tc-bars">
+        <div class="tc-bar-row"><div class="tc-bar-label">Accuracy</div><div class="tc-bar-track"><div class="tc-bar-fill fill-nlp" style="width:75%"></div></div><div class="tc-val">4/5</div></div>
+        <div class="tc-bar-row"><div class="tc-bar-label">Speed</div><div class="tc-bar-track"><div class="tc-bar-fill fill-nlp" style="width:50%"></div></div><div class="tc-val">3/5</div></div>
+        <div class="tc-bar-row"><div class="tc-bar-label">Compact</div><div class="tc-bar-track"><div class="tc-bar-fill fill-nlp" style="width:50%"></div></div><div class="tc-val">3/5</div></div>
+        <div class="tc-bar-row"><div class="tc-bar-label">Explain.</div><div class="tc-bar-track"><div class="tc-bar-fill fill-nlp" style="width:40%"></div></div><div class="tc-val">2/5</div></div>
+      </div>
+    </div>
+    <div class="tradeoff-card tc-cv">
+      <div class="tc-name">ResNet-50</div><div class="tc-org">Microsoft · Vision</div>
+      <div class="tc-bars">
+        <div class="tc-bar-row"><div class="tc-bar-label">Accuracy</div><div class="tc-bar-track"><div class="tc-bar-fill fill-cv" style="width:76%"></div></div><div class="tc-val">4/5</div></div>
+        <div class="tc-bar-row"><div class="tc-bar-label">Speed</div><div class="tc-bar-track"><div class="tc-bar-fill fill-cv" style="width:72%"></div></div><div class="tc-val">4/5</div></div>
+        <div class="tc-bar-row"><div class="tc-bar-label">Compact</div><div class="tc-bar-track"><div class="tc-bar-fill fill-cv" style="width:80%"></div></div><div class="tc-val">4/5</div></div>
+        <div class="tc-bar-row"><div class="tc-bar-label">Explain.</div><div class="tc-bar-track"><div class="tc-bar-fill fill-cv" style="width:55%"></div></div><div class="tc-val">3/5</div></div>
+      </div>
+    </div>
+    <div class="tradeoff-card tc-cv">
+      <div class="tc-name">MobileNetV2</div><div class="tc-org">Google · Vision</div>
+      <div class="tc-bars">
+        <div class="tc-bar-row"><div class="tc-bar-label">Accuracy</div><div class="tc-bar-track"><div class="tc-bar-fill fill-cv" style="width:70%"></div></div><div class="tc-val">3/5</div></div>
+        <div class="tc-bar-row"><div class="tc-bar-label">Speed</div><div class="tc-bar-track"><div class="tc-bar-fill fill-cv" style="width:95%"></div></div><div class="tc-val">5/5</div></div>
+        <div class="tc-bar-row"><div class="tc-bar-label">Compact</div><div class="tc-bar-track"><div class="tc-bar-fill fill-cv" style="width:98%"></div></div><div class="tc-val">5/5</div></div>
+        <div class="tc-bar-row"><div class="tc-bar-label">Explain.</div><div class="tc-bar-track"><div class="tc-bar-fill fill-cv" style="width:55%"></div></div><div class="tc-val">3/5</div></div>
+      </div>
+    </div>
+    <div class="tradeoff-card tc-cv">
+      <div class="tc-name">EfficientNet-B4</div><div class="tc-org">Google · Vision</div>
+      <div class="tc-bars">
+        <div class="tc-bar-row"><div class="tc-bar-label">Accuracy</div><div class="tc-bar-track"><div class="tc-bar-fill fill-cv" style="width:90%"></div></div><div class="tc-val">5/5</div></div>
+        <div class="tc-bar-row"><div class="tc-bar-label">Speed</div><div class="tc-bar-track"><div class="tc-bar-fill fill-cv" style="width:58%"></div></div><div class="tc-val">3/5</div></div>
+        <div class="tc-bar-row"><div class="tc-bar-label">Compact</div><div class="tc-bar-track"><div class="tc-bar-fill fill-cv" style="width:85%"></div></div><div class="tc-val">4/5</div></div>
+        <div class="tc-bar-row"><div class="tc-bar-label">Explain.</div><div class="tc-bar-track"><div class="tc-bar-fill fill-cv" style="width:55%"></div></div><div class="tc-val">3/5</div></div>
+      </div>
+    </div>
+    <div class="tradeoff-card tc-tab">
+      <div class="tc-name">XGBoost</div><div class="tc-org">DMLC · Tabular</div>
+      <div class="tc-bars">
+        <div class="tc-bar-row"><div class="tc-bar-label">Accuracy</div><div class="tc-bar-track"><div class="tc-bar-fill fill-tab" style="width:90%"></div></div><div class="tc-val">5/5</div></div>
+        <div class="tc-bar-row"><div class="tc-bar-label">Speed</div><div class="tc-bar-track"><div class="tc-bar-fill fill-tab" style="width:98%"></div></div><div class="tc-val">5/5</div></div>
+        <div class="tc-bar-row"><div class="tc-bar-label">Compact</div><div class="tc-bar-track"><div class="tc-bar-fill fill-tab" style="width:99%"></div></div><div class="tc-val">5/5</div></div>
+        <div class="tc-bar-row"><div class="tc-bar-label">Explain.</div><div class="tc-bar-track"><div class="tc-bar-fill fill-tab" style="width:85%"></div></div><div class="tc-val">5/5</div></div>
+      </div>
+    </div>
+    <div class="tradeoff-card tc-tab">
+      <div class="tc-name">LightGBM</div><div class="tc-org">Microsoft · Tabular</div>
+      <div class="tc-bars">
+        <div class="tc-bar-row"><div class="tc-bar-label">Accuracy</div><div class="tc-bar-track"><div class="tc-bar-fill fill-tab" style="width:88%"></div></div><div class="tc-val">5/5</div></div>
+        <div class="tc-bar-row"><div class="tc-bar-label">Speed</div><div class="tc-bar-track"><div class="tc-bar-fill fill-tab" style="width:99%"></div></div><div class="tc-val">5/5</div></div>
+        <div class="tc-bar-row"><div class="tc-bar-label">Compact</div><div class="tc-bar-track"><div class="tc-bar-fill fill-tab" style="width:99%"></div></div><div class="tc-val">5/5</div></div>
+        <div class="tc-bar-row"><div class="tc-bar-label">Explain.</div><div class="tc-bar-track"><div class="tc-bar-fill fill-tab" style="width:85%"></div></div><div class="tc-val">5/5</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECOMMENDATIONS -->
+  <div class="sec-head">
+    <div class="sec-icon">🎯</div>
+    <div class="sec-title">Recommendations <span>Which model to choose by scenario</span></div>
+  </div>
+
+  <div class="rec-grid">
+    <div class="rec-card">
+      <div class="rec-scenario">Complex reasoning or generation</div>
+      <div class="rec-model">GPT-4</div>
+      <div class="rec-text">When the task requires sophisticated multi-step reasoning, code generation, or multimodal input and cost and latency are acceptable, GPT-4 provides unmatched capability through the API.</div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-scenario">Custom NLP classification on private data</div>
+      <div class="rec-model">BERT-base / RoBERTa</div>
+      <div class="rec-text">When the organization cannot send data to an external API and needs a fine-tunable model for sentiment analysis, NER, or QA, BERT provides strong performance on modest hardware with full data control.</div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-scenario">Self-hosted generative AI</div>
+      <div class="rec-model">LLaMA 3 (8B or 70B)</div>
+      <div class="rec-text">When generative capability is needed on-premises for privacy or compliance reasons, LLaMA 3 provides open weights and strong performance, fine-tunable via LoRA on a single GPU.</div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-scenario">General vision fine-tuning</div>
+      <div class="rec-model">ResNet-50</div>
+      <div class="rec-text">The default backbone for image classification fine-tuning tasks where accuracy and speed are both important and deployment is on standard server hardware.</div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-scenario">Mobile or edge vision deployment</div>
+      <div class="rec-model">MobileNetV2</div>
+      <div class="rec-text">When model must run on a smartphone, IoT device, or embedded system with hard memory and latency constraints, MobileNetV2 is the clear choice.</div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-scenario">Highest vision accuracy</div>
+      <div class="rec-model">EfficientNet-B4</div>
+      <div class="rec-text">When maximum image classification accuracy is the primary objective and GPU resources are available, EfficientNet-B4 outperforms ResNet-50 at fewer parameters.</div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-scenario">Structured / tabular data (standard size)</div>
+      <div class="rec-model">XGBoost</div>
+      <div class="rec-text">The default choice for tabular classification and regression. Best accuracy on most structured datasets, natively supported by SHAP for interpretable feature attributions.</div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-scenario">Large-scale tabular data or fast retraining</div>
+      <div class="rec-model">LightGBM</div>
+      <div class="rec-text">When the dataset exceeds several million rows or retraining schedules are tight, LightGBM trains 10–20x faster than XGBoost with comparable accuracy.</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-left">Indiana Wesleyan University &nbsp;·&nbsp; 3SU2026 Model Development &nbsp;·&nbsp; Workshop 5</div>
+    <div class="footer-right">Portfolio Artifact &nbsp;·&nbsp; Pre-Trained Model Decision Matrix</div>
+  </div>
+
+</div>
+</body>
+</html>
